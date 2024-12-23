@@ -1,0 +1,75 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Event Player</title>
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link
+      href="node_modules/vis-timeline/styles/vis-timeline-graph2d.min.css"
+      rel="stylesheet"
+    />
+    <link
+      href="node_modules/bootstrap/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+    />
+    <link rel="stylesheet" href="src/css/styles.css" />
+  </head>
+  <body>
+    <div id="event-player-container"></div>
+
+    <!-- Bootstrap Modal -->
+    <div
+      class="modal fade"
+      id="eventModal"
+      tabindex="-1"
+      aria-labelledby="eventModalLabel"
+      aria-hidden="true"
+    >
+      <div class="modal-dialog">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="eventModalLabel">事件标题</h5>
+            <button
+              type="button"
+              class="btn-close"
+              data-bs-dismiss="modal"
+              aria-label="关闭"
+            ></button>
+          </div>
+          <div class="modal-body">事件描述</div>
+          <div class="modal-footer">
+            <button
+              type="button"
+              class="btn btn-secondary"
+              data-bs-dismiss="modal"
+            >
+              关闭
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <script src="dist/main.js"></script>
+    <script>
+      const eventsData = [
+        {
+          id: 1,
+          title: "事件 1",
+          description: "这是事件 1 的详细描述。",
+          coordinates: [114.3055, 30.5931],
+          start: "2024-12-19T10:00:00Z",
+          end: "2024-12-19T12:00:00Z",
+        },
+        // 更多事件
+      ];
+
+      EventPlayer.init({
+        container: "event-player-container",
+        events: eventsData,
+      });
+    </script>
+  </body>
+</html>
