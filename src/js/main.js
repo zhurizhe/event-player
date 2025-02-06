@@ -57,11 +57,11 @@ window.EventPlayer = {
 
     // 初始化地图
     const map = initializeMap();
-    addEventMarkers(map, events);
+    const markers = addEventMarkers(map, events);
 
     // 初始化时间轴
-    initializeTimeline(events, showModal);
-    playerControl.init();
+    const timeline = initializeTimeline(events, showModal);
+    playerControl.init(events, map, timeline, markers);
   }
 };
 
