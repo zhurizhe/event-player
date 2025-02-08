@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1"/>
     <title>Event Player</title>
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
     <link
       href="node_modules/vis-timeline/styles/vis-timeline-graph2d.min.css"
       rel="stylesheet"
-    />
+/>
     <link
       href="node_modules/bootstrap/dist/css/bootstrap.min.css"
       rel="stylesheet"
-    />
-    <link rel="stylesheet" href="src/css/styles.css" />
+/>
+    <link rel="stylesheet" href="src/css/styles.css"/>
   </head>
   <body>
     <div id="event-player-container"></div>
@@ -53,39 +53,240 @@
     </div>
 
     <script src="dist/main.js"></script>
-    <script>
-      const eventsData = [
-        {
-          id: 1,
-          title: "事件 1",
-          description: "这是事件 1 的详细描述。",
-          coordinates: [114.3055, 30.5931],
-          start: "2024-12-19T10:00:00Z",
-          end: "2024-12-19T12:00:00Z",
-        },
-          {
-          id: 2,
-          title: "事件 2",
-          description: "这是事件 2 的详细描述。",
-          coordinates: [113.3055, 31.5931],
-          start: "2024-12-20T10:00:00Z",
-          end: "2024-12-20T12:00:00Z",
-        },
-          {
-          id: 3,
-          title: "事件 3",
-          description: "这是事件 3 的详细描述。",
-          coordinates: [115.3055, 29.5931],
-          start: "2024-12-21T10:00:00Z",
-          end: "2024-12-21T12:00:00Z",
-        },
-        // 更多事件
-      ];
+            <script>
+              const eventsData = [
+                {
+                  id: 1,
+                  title: '抵京（首都国际机场，办理144小时过境免签）',
+                  description: '上午8:00抵达北京首都国际机场，办理144小时过境免签。',
+                  coordinates: [
+                    116.5846, 39.9025
+                  ], // 假设首都国际机场的经纬度
+                  start: '2024-12-01T08:00:00',
+                  end: '2024-12-01T08:30:00',
+                  additionalInfo: {
+                    category: '交通'
+                  }
+                }, {
+                  id: 2,
+                  title: '天安门广场',
+                  description: '参观天安门广场，若时间允许可以观看降旗仪式。',
+                  coordinates: [
+                    116.3975, 39.9037
+                  ], // 天安门广场经纬度
+                  start: '2024-12-01T09:30:00',
+                  end: '2024-12-01T11:00:00',
+                  additionalInfo: {
+                    category: '景点'
+                  }
+                }, {
+                  id: 3,
+                  title: '故宫博物院',
+                  description: '参观故宫博物院，提前7天预约，带护照走外宾通道。',
+                  coordinates: [
+                    116.3979, 39.9163
+                  ], // 故宫博物院经纬度
+                  start: '2024-12-01T13:00:00',
+                  end: '2024-12-01T15:00:00',
+                  additionalInfo: {
+                    category: '文化'
+                  }
+                }, {
+                  id: 4,
+                  title: '景山公园',
+                  description: '参观景山公园，俯瞰紫禁城。',
+                  coordinates: [
+                    116.3969, 39.9311
+                  ], // 景山公园经纬度
+                  start: '2024-12-01T16:00:00',
+                  end: '2024-12-01T17:30:00',
+                  additionalInfo: {
+                    category: '景点'
+                  }
+                }, {
+                  id: 5,
+                  title: '王府井大街（全聚德烤鸭+老北京小吃）',
+                  description: '晚上在王府井大街享用全聚德烤鸭和老北京小吃。',
+                  coordinates: [
+                    116.4184, 39.9120
+                  ], // 王府井大街经纬度
+                  start: '2024-12-01T19:00:00',
+                  end: '2024-12-01T20:00:00',
+                  additionalInfo: {
+                    category: '美食'
+                  }
+                }, {
+                  id: 6,
+                  title: '入住酒店',
+                  description: '入住酒店，建议选择地铁2号线沿线的酒店，如崇文门附近。',
+                  coordinates: [
+                    116.4213, 39.9040
+                  ], // 假设酒店位置经纬度
+                  start: '2024-12-01T21:00:00',
+                  end: '2024-12-01T22:30:00',
+                  additionalInfo: {
+                    category: '住宿'
+                  }
+                }, {
+                  id: 7,
+                  title: '慕田峪长城',
+                  description: '早上7:30出发前往慕田峪长城，建议包车或巴士直达，避开八达岭的人流。',
+                  coordinates: [
+                    116.5704, 40.4319
+                  ], // 慕田峪长城经纬度
+                  start: '2024-12-02T07:30:00',
+                  end: '2024-12-02T11:30:00',
+                  additionalInfo: {
+                    category: '景点'
+                  }
+                }, {
+                  id: 8,
+                  title: '长城脚下午餐（体验虹鳟鱼烧烤）',
+                  description: '在长城脚下享用虹鳟鱼烧烤。',
+                  coordinates: [
+                    116.5704, 40.4319
+                  ], // 与慕田峪长城的经纬度相同
+                  start: '2024-12-02T12:00:00',
+                  end: '2024-12-02T14:00:00',
+                  additionalInfo: {
+                    category: '美食'
+                  }
+                }, {
+                  id: 9,
+                  title: '明十三陵（定陵地宫+神道石像生）',
+                  description: '参观明十三陵的定陵地宫和神道石像。',
+                  coordinates: [
+                    116.2834, 40.3145
+                  ], // 明十三陵经纬度
+                  start: '2024-12-02T14:00:00',
+                  end: '2024-12-02T16:00:00',
+                  additionalInfo: {
+                    category: '历史'
+                  }
+                }, {
+                  id: 10,
+                  title: '五道营胡同晚餐（中西融合创意菜）',
+                  description: '在五道营胡同享用晚餐，体验中西融合创意菜。',
+                  coordinates: [
+                    116.4295, 39.9289
+                  ], // 五道营胡同经纬度
+                  start: '2024-12-02T18:00:00',
+                  end: '2024-12-02T20:00:00',
+                  additionalInfo: {
+                    category: '美食'
+                  }
+                }, {
+                  id: 11,
+                  title: '北京西站乘高铁',
+                  description: '早上7:30从北京西站乘坐G87次高铁，前往西安。',
+                  coordinates: [
+                    116.3075, 39.8995
+                  ], // 北京西站经纬度
+                  start: '2024-12-03T07:30:00',
+                  end: '2024-12-03T12:00:00',
+                  additionalInfo: {
+                    category: '交通'
+                  }
+                }, {
+                  id: 12,
+                  title: '回民街老米家泡馍',
+                  description: '抵达西安后，午餐享用回民街的老米家泡馍。',
+                  coordinates: [
+                    108.9542, 34.2627
+                  ], // 回民街经纬度
+                  start: '2024-12-03T12:00:00',
+                  end: '2024-12-03T14:00:00',
+                  additionalInfo: {
+                    category: '美食'
+                  }
+                }, {
+                  id: 13,
+                  title: '陕西历史博物馆',
+                  description: '参观陕西历史博物馆，预约含何家村遗宝的特展票。',
+                  coordinates: [
+                    108.9531, 34.2649
+                  ], // 陕西历史博物馆经纬度
+                  start: '2024-12-03T14:30:00',
+                  end: '2024-12-03T16:30:00',
+                  additionalInfo: {
+                    category: '文化'
+                  }
+                }, {
+                  id: 14,
+                  title: '大唐不夜城（不倒翁表演+大雁塔灯光秀）',
+                  description: '晚上参观大唐不夜城，欣赏不倒翁表演和大雁塔灯光秀。',
+                  coordinates: [
+                    108.9572, 34.2549
+                  ], // 大唐不夜城经纬度
+                  start: '2024-12-03T19:00:00',
+                  end: '2024-12-03T21:00:00',
+                  additionalInfo: {
+                    category: '娱乐'
+                  }
+                }, {
+                  id: 15,
+                  title: '西安咸阳机场飞往上海',
+                  description: '上午9:00从西安咸阳机场飞往上海。',
+                  coordinates: [
+                    108.7527, 34.4474
+                  ], // 西安咸阳机场经纬度
+                  start: '2024-12-04T09:00:00',
+                  end: '2024-12-04T12:00:00',
+                  additionalInfo: {
+                    category: '交通'
+                  }
+                }, {
+                  id: 16,
+                  title: '豫园（九曲桥-湖心亭-南翔小笼包）',
+                  description: '抵达上海后直奔豫园，参观九曲桥、湖心亭，品尝南翔小笼包。',
+                  coordinates: [
+                    121.4907, 31.2330
+                  ], // 豫园经纬度
+                  start: '2024-12-04T12:00:00',
+                  end: '2024-12-04T15:00:00',
+                  additionalInfo: {
+                    category: '景点'
+                  }
+                }, {
+                  id: 17,
+                  title: '外滩（万国建筑博览群+浦东天际线合影）',
+                  description: '参观外滩，拍摄万国建筑博览群和浦东天际线合影。',
+                  coordinates: [
+                    121.4904, 31.2397
+                  ], // 外滩经纬度
+                  start: '2024-12-04T15:00:00',
+                  end: '2024-12-04T18:00:00',
+                  additionalInfo: {
+                    category: '景点'
+                  }
+                }, {
+                  id: 18,
+                  title: '南京路步行街（第一食品商店买伴手礼）',
+                  description: '在南京路步行街购买伴手礼。',
+                  coordinates: [
+                    121.4814, 31.2373
+                  ], // 南京路步行街经纬度
+                  start: '2024-12-04T18:00:00',
+                  end: '2024-12-04T20:00:00',
+                  additionalInfo: {
+                    category: '购物'
+                  }
+                }, {
+                  id: 19,
+                  title: '浦东机场办理离境手续',
+                  description: '凌晨0:30在浦东机场办理离境手续。',
+                  coordinates: [
+                    121.805, 31.144
+                  ], // 浦东机场经纬度
+                  start: '2024-12-05T00:30:00',
+                  end: '2024-12-05T02:00:00',
+                  additionalInfo: {
+                    category: '交通'
+                  }
+                }
+              ];
 
-      EventPlayer.init({
-        container: "event-player-container",
-        events: eventsData,
-      });
-    </script>
-  </body>
-</html>
+              EventPlayer.init({container: "event-player-container", events: eventsData});
+            </script>
+          </body>
+        </html>

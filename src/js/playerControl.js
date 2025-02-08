@@ -57,7 +57,7 @@ function init(eventData, mapInstance, timelineInstance, markersInstance) {
 
     // 进度条更新
     progressBar.addEventListener('input', () => {
-        currentProgress = progressBar.value;
+        currentProgress = progressBar.value*1;
         updateEventProgress(currentProgress);
     });
 
@@ -73,7 +73,12 @@ function playEvent() {
       updateTimelineAndMap(currentProgress);
   
       if (currentProgress >= 100) {
-        stopEvent();
+        if(isLooping){
+          currentProgress = 0;
+          progressBar.value = currentProgress;
+        }else{
+          stopEvent();
+        }
       }
     }, 100); // 每 100ms 更新一次进度
   }
@@ -91,6 +96,8 @@ function pauseEvent() {
     currentIndex = 0; // 重置为第一个事件
     // 清空地图和时间轴的焦点
     resetMapAndTimeline();
+    isPlaying = false;
+    playPauseBtn.innerHTML = '▶️'; // 显示播放
   }
 
 // 设置播放速度
@@ -108,9 +115,10 @@ function updateTimelineAndMap(progress) {
     if (eventIndex !== currentIndex) {
       currentIndex = eventIndex;
       const event = events[currentIndex];
-      
+      if(event === undefined) return;
+
       // 更新地图聚焦
-      map.setView([event.coordinates[1], event.coordinates[0]], 13); // 聚焦到当前事件
+      map.setView([event.coordinates[1], event.coordinates[0]], 15); // 聚焦到当前事件
       const marker = markers[currentIndex]; // 获取当前事件的标记
       marker.openPopup(); // 弹出事件信息
   
