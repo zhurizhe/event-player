@@ -2,19 +2,19 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
-    <meta charset="UTF-8"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1"/>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>Event Player</title>
-    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css"/>
+    <link rel="stylesheet" href="node_modules/leaflet/dist/leaflet.css" />
     <link
       href="node_modules/vis-timeline/styles/vis-timeline-graph2d.min.css"
       rel="stylesheet"
-/>
+    />
     <link
       href="node_modules/bootstrap/dist/css/bootstrap.min.css"
       rel="stylesheet"
-/>
-    <link rel="stylesheet" href="src/css/styles.css"/>
+    />
+    <link rel="stylesheet" href="src/css/styles.css" />
   </head>
   <body>
     <div id="event-player-container"></div>
@@ -39,7 +39,7 @@
             ></button>
           </div>
           <div class="modal-body">事件描述</div>
-          <div class="modal-footer"
+          <div class="modal-footer">
             <button
               type="button"
               class="btn btn-secondary"
@@ -53,240 +53,261 @@
     </div>
 
     <script src="dist/main.js"></script>
-            <script>
-              const eventsData = [
-                {
-                  id: 1,
-                  title: '抵京（首都国际机场，办理144小时过境免签）',
-                  description: '上午8:00抵达北京首都国际机场，办理144小时过境免签。',
-                  coordinates: [
-                    116.5846, 39.9025
-                  ], // 假设首都国际机场的经纬度
-                  start: '2024-12-01T08:00:00',
-                  end: '2024-12-01T08:30:00',
-                  additionalInfo: {
-                    category: '交通'
-                  }
-                }, {
-                  id: 2,
-                  title: '天安门广场',
-                  description: '参观天安门广场，若时间允许可以观看降旗仪式。',
-                  coordinates: [
-                    116.3975, 39.9037
-                  ], // 天安门广场经纬度
-                  start: '2024-12-01T09:30:00',
-                  end: '2024-12-01T11:00:00',
-                  additionalInfo: {
-                    category: '景点'
-                  }
-                }, {
-                  id: 3,
-                  title: '故宫博物院',
-                  description: '参观故宫博物院，提前7天预约，带护照走外宾通道。',
-                  coordinates: [
-                    116.3979, 39.9163
-                  ], // 故宫博物院经纬度
-                  start: '2024-12-01T13:00:00',
-                  end: '2024-12-01T15:00:00',
-                  additionalInfo: {
-                    category: '文化'
-                  }
-                }, {
-                  id: 4,
-                  title: '景山公园',
-                  description: '参观景山公园，俯瞰紫禁城。',
-                  coordinates: [
-                    116.3969, 39.9311
-                  ], // 景山公园经纬度
-                  start: '2024-12-01T16:00:00',
-                  end: '2024-12-01T17:30:00',
-                  additionalInfo: {
-                    category: '景点'
-                  }
-                }, {
-                  id: 5,
-                  title: '王府井大街（全聚德烤鸭+老北京小吃）',
-                  description: '晚上在王府井大街享用全聚德烤鸭和老北京小吃。',
-                  coordinates: [
-                    116.4184, 39.9120
-                  ], // 王府井大街经纬度
-                  start: '2024-12-01T19:00:00',
-                  end: '2024-12-01T20:00:00',
-                  additionalInfo: {
-                    category: '美食'
-                  }
-                }, {
-                  id: 6,
-                  title: '入住酒店',
-                  description: '入住酒店，建议选择地铁2号线沿线的酒店，如崇文门附近。',
-                  coordinates: [
-                    116.4213, 39.9040
-                  ], // 假设酒店位置经纬度
-                  start: '2024-12-01T21:00:00',
-                  end: '2024-12-01T22:30:00',
-                  additionalInfo: {
-                    category: '住宿'
-                  }
-                }, {
-                  id: 7,
-                  title: '慕田峪长城',
-                  description: '早上7:30出发前往慕田峪长城，建议包车或巴士直达，避开八达岭的人流。',
-                  coordinates: [
-                    116.5704, 40.4319
-                  ], // 慕田峪长城经纬度
-                  start: '2024-12-02T07:30:00',
-                  end: '2024-12-02T11:30:00',
-                  additionalInfo: {
-                    category: '景点'
-                  }
-                }, {
-                  id: 8,
-                  title: '长城脚下午餐（体验虹鳟鱼烧烤）',
-                  description: '在长城脚下享用虹鳟鱼烧烤。',
-                  coordinates: [
-                    116.5704, 40.4319
-                  ], // 与慕田峪长城的经纬度相同
-                  start: '2024-12-02T12:00:00',
-                  end: '2024-12-02T14:00:00',
-                  additionalInfo: {
-                    category: '美食'
-                  }
-                }, {
-                  id: 9,
-                  title: '明十三陵（定陵地宫+神道石像生）',
-                  description: '参观明十三陵的定陵地宫和神道石像。',
-                  coordinates: [
-                    116.2834, 40.3145
-                  ], // 明十三陵经纬度
-                  start: '2024-12-02T14:00:00',
-                  end: '2024-12-02T16:00:00',
-                  additionalInfo: {
-                    category: '历史'
-                  }
-                }, {
-                  id: 10,
-                  title: '五道营胡同晚餐（中西融合创意菜）',
-                  description: '在五道营胡同享用晚餐，体验中西融合创意菜。',
-                  coordinates: [
-                    116.4295, 39.9289
-                  ], // 五道营胡同经纬度
-                  start: '2024-12-02T18:00:00',
-                  end: '2024-12-02T20:00:00',
-                  additionalInfo: {
-                    category: '美食'
-                  }
-                }, {
-                  id: 11,
-                  title: '北京西站乘高铁',
-                  description: '早上7:30从北京西站乘坐G87次高铁，前往西安。',
-                  coordinates: [
-                    116.3075, 39.8995
-                  ], // 北京西站经纬度
-                  start: '2024-12-03T07:30:00',
-                  end: '2024-12-03T12:00:00',
-                  additionalInfo: {
-                    category: '交通'
-                  }
-                }, {
-                  id: 12,
-                  title: '回民街老米家泡馍',
-                  description: '抵达西安后，午餐享用回民街的老米家泡馍。',
-                  coordinates: [
-                    108.9542, 34.2627
-                  ], // 回民街经纬度
-                  start: '2024-12-03T12:00:00',
-                  end: '2024-12-03T14:00:00',
-                  additionalInfo: {
-                    category: '美食'
-                  }
-                }, {
-                  id: 13,
-                  title: '陕西历史博物馆',
-                  description: '参观陕西历史博物馆，预约含何家村遗宝的特展票。',
-                  coordinates: [
-                    108.9531, 34.2649
-                  ], // 陕西历史博物馆经纬度
-                  start: '2024-12-03T14:30:00',
-                  end: '2024-12-03T16:30:00',
-                  additionalInfo: {
-                    category: '文化'
-                  }
-                }, {
-                  id: 14,
-                  title: '大唐不夜城（不倒翁表演+大雁塔灯光秀）',
-                  description: '晚上参观大唐不夜城，欣赏不倒翁表演和大雁塔灯光秀。',
-                  coordinates: [
-                    108.9572, 34.2549
-                  ], // 大唐不夜城经纬度
-                  start: '2024-12-03T19:00:00',
-                  end: '2024-12-03T21:00:00',
-                  additionalInfo: {
-                    category: '娱乐'
-                  }
-                }, {
-                  id: 15,
-                  title: '西安咸阳机场飞往上海',
-                  description: '上午9:00从西安咸阳机场飞往上海。',
-                  coordinates: [
-                    108.7527, 34.4474
-                  ], // 西安咸阳机场经纬度
-                  start: '2024-12-04T09:00:00',
-                  end: '2024-12-04T12:00:00',
-                  additionalInfo: {
-                    category: '交通'
-                  }
-                }, {
-                  id: 16,
-                  title: '豫园（九曲桥-湖心亭-南翔小笼包）',
-                  description: '抵达上海后直奔豫园，参观九曲桥、湖心亭，品尝南翔小笼包。',
-                  coordinates: [
-                    121.4907, 31.2330
-                  ], // 豫园经纬度
-                  start: '2024-12-04T12:00:00',
-                  end: '2024-12-04T15:00:00',
-                  additionalInfo: {
-                    category: '景点'
-                  }
-                }, {
-                  id: 17,
-                  title: '外滩（万国建筑博览群+浦东天际线合影）',
-                  description: '参观外滩，拍摄万国建筑博览群和浦东天际线合影。',
-                  coordinates: [
-                    121.4904, 31.2397
-                  ], // 外滩经纬度
-                  start: '2024-12-04T15:00:00',
-                  end: '2024-12-04T18:00:00',
-                  additionalInfo: {
-                    category: '景点'
-                  }
-                }, {
-                  id: 18,
-                  title: '南京路步行街（第一食品商店买伴手礼）',
-                  description: '在南京路步行街购买伴手礼。',
-                  coordinates: [
-                    121.4814, 31.2373
-                  ], // 南京路步行街经纬度
-                  start: '2024-12-04T18:00:00',
-                  end: '2024-12-04T20:00:00',
-                  additionalInfo: {
-                    category: '购物'
-                  }
-                }, {
-                  id: 19,
-                  title: '浦东机场办理离境手续',
-                  description: '凌晨0:30在浦东机场办理离境手续。',
-                  coordinates: [
-                    121.805, 31.144
-                  ], // 浦东机场经纬度
-                  start: '2024-12-05T00:30:00',
-                  end: '2024-12-05T02:00:00',
-                  additionalInfo: {
-                    category: '交通'
-                  }
-                }
-              ];
+    <script>
+      const events = [
+        {
+          id: 1,
+          title:
+            "Arrival in Beijing (Beijing Capital International Airport, 144-hour Transit Visa Exemption)",
+          description:
+            "Arrive at Beijing Capital International Airport at 8:00 AM and handle the 144-hour transit visa exemption procedure.",
+          coordinates: [116.603039, 40.080525],
+          start: "2024-12-01T08:00:00",
+          end: "2024-12-01T08:30:00",
+          additionalInfo: {
+            category: "Transportation",
+          },
+        },
+        {
+          id: 2,
+          title: "Tiananmen Square",
+          description:
+            "Visit Tiananmen Square. If time permits, watch the flag-lowering ceremony.",
+          coordinates: [116.3975, 39.9037],
+          start: "2024-12-01T09:30:00",
+          end: "2024-12-01T11:00:00",
+          additionalInfo: {
+            category: "Attraction",
+          },
+        },
+        {
+          id: 3,
+          title: "The Palace Museum (Forbidden City)",
+          description:
+            "Visit the Palace Museum. Reserve 7 days in advance, and use the foreign visitors channel with your passport.",
+          coordinates: [116.3979, 39.9163],
+          start: "2024-12-01T13:00:00",
+          end: "2024-12-01T15:00:00",
+          additionalInfo: {
+            category: "Culture",
+          },
+        },
+        {
+          id: 4,
+          title: "Jingshan Park",
+          description:
+            "Visit Jingshan Park for a panoramic view of the Forbidden City.",
+          coordinates: [116.3969, 39.9311],
+          start: "2024-12-01T16:00:00",
+          end: "2024-12-01T17:30:00",
+          additionalInfo: {
+            category: "Attraction",
+          },
+        },
+        {
+          id: 5,
+          title: "Wangfujing Street (Quanjude Roast Duck + Old Beijing Snacks)",
+          description:
+            "Enjoy Quanjude roast duck and old Beijing snacks at Wangfujing Street in the evening.",
+          coordinates: [116.4184, 39.912],
+          start: "2024-12-01T19:00:00",
+          end: "2024-12-01T20:00:00",
+          additionalInfo: {
+            category: "Cuisine",
+          },
+        },
+        {
+          id: 6,
+          title: "Hotel Check-In",
+          description:
+            "Check into the hotel. It is recommended to choose one along Metro Line 2, e.g., near Chongwenmen.",
+          coordinates: [116.4213, 39.904],
+          start: "2024-12-01T21:00:00",
+          end: "2024-12-01T22:30:00",
+          additionalInfo: {
+            category: "Accommodation",
+          },
+        },
+        {
+          id: 7,
+          title: "Mutianyu Great Wall",
+          description:
+            "Depart at 7:30 AM for the Mutianyu Great Wall by car or direct bus to avoid crowds at Badaling.",
+          coordinates: [116.5704, 40.4319],
+          start: "2024-12-02T07:30:00",
+          end: "2024-12-02T11:30:00",
+          additionalInfo: {
+            category: "Attraction",
+          },
+        },
+        {
+          id: 8,
+          title: "Lunch at the Foot of the Great Wall (Rainbow Trout BBQ)",
+          description:
+            "Enjoy rainbow trout barbecue at the foot of the Great Wall.",
+          coordinates: [116.5704, 40.4319],
+          start: "2024-12-02T12:00:00",
+          end: "2024-12-02T14:00:00",
+          additionalInfo: {
+            category: "Cuisine",
+          },
+        },
+        {
+          id: 9,
+          title:
+            "Ming Tombs (Dingling Underground Palace + Sacred Way Stone Statues)",
+          description:
+            "Visit the Dingling Underground Palace and the Sacred Way stone statues at the Ming Tombs.",
+          coordinates: [116.2834, 40.3145],
+          start: "2024-12-02T14:00:00",
+          end: "2024-12-02T16:00:00",
+          additionalInfo: {
+            category: "History",
+          },
+        },
+        {
+          id: 10,
+          title: "Dinner at Wudaoying Hutong (Fusion Cuisine)",
+          description:
+            "Have dinner at Wudaoying Hutong and experience creative Chinese-Western fusion cuisine.",
+          coordinates: [116.4295, 39.9289],
+          start: "2024-12-02T18:00:00",
+          end: "2024-12-02T20:00:00",
+          additionalInfo: {
+            category: "Cuisine",
+          },
+        },
+        {
+          id: 11,
+          title: "Take High-Speed Train from Beijing West Station",
+          description:
+            "Depart from Beijing West Station at 7:30 AM on G87 high-speed train to Xi’an.",
+          coordinates: [116.3075, 39.8995],
+          start: "2024-12-03T07:30:00",
+          end: "2024-12-03T12:00:00",
+          additionalInfo: {
+            category: "Transportation",
+          },
+        },
+        {
+          id: 12,
+          title: "Hui Min Street Lao Mi Jia Paomo",
+          description:
+            "After arriving in Xi’an, have lunch at Lao Mi Jia Paomo on Hui Min Street.",
+          coordinates: [108.9542, 34.2627],
+          start: "2024-12-03T12:00:00",
+          end: "2024-12-03T14:00:00",
+          additionalInfo: {
+            category: "Cuisine",
+          },
+        },
+        {
+          id: 13,
+          title: "Shanxi History Museum",
+          description:
+            "Visit the Shanxi History Museum. Reserve tickets for the special exhibition featuring Hejia Village relics.",
+          coordinates: [108.9531, 34.2649],
+          start: "2024-12-03T14:30:00",
+          end: "2024-12-03T16:30:00",
+          additionalInfo: {
+            category: "Culture",
+          },
+        },
+        {
+          id: 14,
+          title:
+            "Datang Everbright City (Budaoweng Performance + Giant Wild Goose Pagoda Light Show)",
+          description:
+            "Visit Datang Everbright City in the evening, enjoy the wobbly tumbler performance and the Giant Wild Goose Pagoda light show.",
+          coordinates: [108.9572, 34.2549],
+          start: "2024-12-03T19:00:00",
+          end: "2024-12-03T21:00:00",
+          additionalInfo: {
+            category: "Entertainment",
+          },
+        },
+        {
+          id: 15,
+          title: "Fly from Xi’an Xianyang Airport to Shanghai",
+          description: "Depart Xi’an Xianyang Airport at 9:00 AM for Shanghai.",
+          coordinates: [108.7527, 34.4474],
+          start: "2024-12-04T09:00:00",
+          end: "2024-12-04T12:00:00",
+          additionalInfo: {
+            category: "Transportation",
+          },
+        },
+        {
+          id: 16,
+          title:
+            "Yu Garden (Nine Zigzag Bridge, Huxinting Tea House, Nanxiang Steamed Buns)",
+          description:
+            "After arriving in Shanghai, head directly to Yu Garden, visit the Nine Zigzag Bridge and Huxinting Tea House, and taste Nanxiang steamed buns.",
+          coordinates: [121.4907, 31.233],
+          start: "2024-12-04T12:00:00",
+          end: "2024-12-04T15:00:00",
+          additionalInfo: {
+            category: "Attraction",
+          },
+        },
+        {
+          id: 17,
+          title:
+            "The Bund (International Architecture Exhibition + Pudong Skyline Photo)",
+          description:
+            "Visit The Bund, take photos of the international architecture exhibition and the Pudong skyline.",
+          coordinates: [121.4904, 31.2397],
+          start: "2024-12-04T15:00:00",
+          end: "2024-12-04T18:00:00",
+          additionalInfo: {
+            category: "Attraction",
+          },
+        },
+        {
+          id: 18,
+          title:
+            "Nanjing Road Pedestrian Street (First Food Store Souvenir Shopping)",
+          description: "Shop for souvenirs at Nanjing Road Pedestrian Street.",
+          coordinates: [121.4814, 31.2373],
+          start: "2024-12-04T18:00:00",
+          end: "2024-12-04T20:00:00",
+          additionalInfo: {
+            category: "Shopping",
+          },
+        },
+        {
+          id: 19,
+          title: "Departing Procedures at Pudong Airport",
+          description:
+            "At 0:30 AM, handle departure procedures at Pudong Airport.",
+          coordinates: [121.805, 31.144],
+          start: "2024-12-05T00:30:00",
+          end: "2024-12-05T02:00:00",
+          additionalInfo: {
+            category: "Transportation",
+          },
+        },
+      ];
 
-              EventPlayer.init({container: "event-player-container", events: eventsData});
-            </script>
-          </body>
-        </html>
+      window.EventPlayer.init({
+        container: "event-player-container", // 容器 ID
+        events: events, // 事件数据
+        controls: {
+          playPause: true, // 显示播放/暂停按钮
+          stop: false, // 显示停止按钮
+          playMode: false, // 不显示播放模式按钮
+          speedControls: false, // 显示速度控制按钮
+          progressBar: true, // 显示进度条
+        },
+        styles: {
+          controlBtn: "control-btn", 
+          playerControlsContainer: "player-controls", // 自定义容器样式
+          progressBar: "progress-bar", 
+          //controlBtn: "custom-control-btn", // 自定义按钮样式
+          //playerControlsContainer: "custom-player-controls", // 自定义容器样式
+          //progressBar: "custom-progress-bar", // 自定义进度条样式
+        },
+      });
+    </script>
+  </body>
+</html>
