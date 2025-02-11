@@ -2,7 +2,14 @@
   "name": "event-player",
   "version": "1.0.0",
   "description": "**Event Player** 是一个前端组件，用于通过地图和时间轴展示事件。它可以轻松集成到任何项目中，并接受外部传递的事件数据。",
-  "main": "dist/main.js",
+  "main": "dist/index.esm.js",  
+  "exports": {
+    ".": {
+      "require": "./dist/index.umd.js", 
+      "import": "./dist/index.esm.js"  
+    }
+  },
+  "private": false,  
   "scripts": {
     "start": "webpack serve --mode production --open",
     "dev": "webpack serve --mode development --open",
@@ -17,7 +24,7 @@
     "leaflet",
     "vis-timeline"
   ],
-  "author": "Your Name",
+  "author": "James",
   "license": "MIT",
   "devDependencies": {
     "@babel/core": "^7.20.0",
