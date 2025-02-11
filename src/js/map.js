@@ -6,15 +6,18 @@ let markers = [];  // 存储所有的标记
     // 创建自定义图标
 const customIcon = new L.Icon({
   iconUrl: '/assets/images/marker-icon.png',
-  iconSize: [25, 41],
+  iconSize: [41, 41],
   iconAnchor: [16, 32],
   popupAnchor: [0, -32],
 });
+const accessToken = 'pk.eyJ1Ijoic3Rld2FydDc5NzEiLCJhIjoiY202dzdmbzh0MDdsazJzb2hzdDU2bWsyciJ9.p536KOpuLcph6nhzEY4A_w'; 
 const initializeMap = () => {
   const map = L.map('map').setView([30.5931, 114.3055], 13); // 示例坐标：武汉
 
-  L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
-    attribution: '&copy; OpenStreetMap contributors'
+  L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
+    attribution: '© Mapbox © OpenStreetMap contributors',
+    tileSize: 512,
+    zoomOffset: -1,
   }).addTo(map);
 
   return map;
@@ -26,7 +29,7 @@ export const addEventMarkers = (map, events) => {
     marker.bindPopup(`<b>${event.title}</b><br>${event.description}`);
 
     marker.on('click', () => {
-      showModal(event);
+      // showModal(event);
     });
     markers.push(marker);  // 将每个标记添加到数组中
 

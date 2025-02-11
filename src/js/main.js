@@ -1,21 +1,40 @@
 // src/js/main.js
-import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { Timeline } from 'vis-timeline/standalone';
-import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
-import 'bootstrap/dist/css/bootstrap.min.css';
-import 'bootstrap/dist/js/bootstrap.bundle.min.js';
-import initializeMap, { addEventMarkers } from './map';
-import initializeTimeline from './timeline';
-import { showModal } from './modal';
-import playerControl from './playerControl';
+import "leaflet/dist/leaflet.css";
+import "vis-timeline/styles/vis-timeline-graph2d.min.css";
+import "bootstrap/dist/css/bootstrap.min.css";
+import "bootstrap/dist/js/bootstrap.bundle.min.js";
+import initializeMap, { addEventMarkers } from "./map";
+import initializeTimeline from "./timeline";
+import playerControl from "./playerControl";
 
-// 全局命名空间
+// 默认控制器配置
+const defaultConfig = {
+  container: "event-player-container", // 容器ID
+  events: [], // 事件数据
+  controls: {
+    playPause: true,    // 播放/暂停按钮
+    stop: true,         // 停止按钮
+    playMode: true,     // 播放模式按钮
+    speedControls: true, // 速度控制按钮
+    progressBar: true   // 进度条
+  },
+  styles: {
+    controlBtn: "control-btn", // 控制按钮样式
+    playerControlsContainer: "player-controls", // 控制器容器样式
+    progressBar: "progress-bar"  // 进度条样式
+  }
+};
+
 window.EventPlayer = {
-  init: function(config) {
-    const { container, events } = config;
+  init: function (config) {
+    // 合并默认配置与用户传入的配置
+    const finalConfig = { ...defaultConfig, ...config };
+
+    const { container, events, controls, styles } = finalConfig;
+
+    // 校验容器和事件数据是否存在
     if (!container || !events) {
-      console.error('EventPlayer 初始化失败：缺少容器或事件数据。');
+      console.error("EventPlayer 初始化失败：缺少容器或事件数据。");
       return;
     }
 
@@ -26,32 +45,22 @@ window.EventPlayer = {
       return;
     }
 
+    // 根据配置动态插入控制器HTML
     containerElement.innerHTML = `
       <div id="map"></div>
       <div id="timeline"></div>
       <!-- 控制器容器 -->
-      <div class="player-controls">
-        <button id="playPauseBtn" class="control-btn">
-          ▶️
-        </button>
-        <button id="stopBtn" class="control-btn">
-          🛑
-        </button>
-        <button id="playModeBtn" class="control-btn">
-          🔁 单次播放
-        </button>
-        <div class="speed-controls">
-          <button id="speedBtn1" class="control-btn">
-            1x
-          </button>
-          <button id="speedBtn2" class="control-btn">
-            2x
-          </button>
-          <button id="speedBtn3" class="control-btn">
-            3x
-          </button>
-        </div>
-        <input type="range" id="progressBar" min="0" max="100" value="0" class="progress-bar" />
+      <div id="${styles.playerControlsContainer}">
+        ${controls.playPause ? `<button id="playPauseBtn" class="${styles.controlBtn}">▶️</button>` : ''}
+        ${controls.stop ? `<button id="stopBtn" class="${styles.controlBtn}">🛑</button>` : ''}
+        ${controls.playMode ? `<button id="playModeBtn" class="${styles.controlBtn}">🔁</button>` : ''}
+        ${controls.speedControls ? `
+          <div class="speed-controls">
+            <button id="speedBtn1" class="${styles.controlBtn}">1x</button>
+            <button id="speedBtn2" class="${styles.controlBtn}">2x</button>
+            <button id="speedBtn3" class="${styles.controlBtn}">3x</button>
+          </div>` : ''}
+        ${controls.progressBar ? `<input type="range" id="progressBar" min="0" max="100" value="0" class="${styles.progressBar}">` : ''}
       </div>
     `;
 
@@ -60,13 +69,13 @@ window.EventPlayer = {
     const markers = addEventMarkers(map, events);
 
     // 初始化时间轴
-    const timeline = initializeTimeline(events, showModal);
+    const timeline = initializeTimeline(events);
     playerControl.init(events, map, timeline, markers);
-  }
+  },
 };
 
 // 监听自定义事件（如果使用）
-document.addEventListener('initializeEventPlayer', (e) => {
+document.addEventListener("initializeEventPlayer", (e) => {
   const { container, events } = e.detail;
   window.EventPlayer.init({ container, events });
 });

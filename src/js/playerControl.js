@@ -10,139 +10,187 @@ let events = [];  // 存储事件数据
 let markers = [];  // 存储所有的标记
 let map;  // 存储地图实例
 let timeline;  // 存储时间轴实例
+
 function init(eventData, mapInstance, timelineInstance, markersInstance) {
-    events = eventData;  // 存储事件数据
-    map = mapInstance;    // 存储地图实例
-    timeline = timelineInstance;  // 存储时间轴实例
-    markers = markersInstance;  // 存储所有的标记
-      // 获取控制器按钮
-    const playPauseBtn = document.getElementById('playPauseBtn');
-    const stopBtn = document.getElementById('stopBtn');
-    const playModeBtn = document.getElementById('playModeBtn');
-    const speedBtns = document.querySelectorAll('.speed-controls button');
-    const progressBar = document.getElementById('progressBar');
+  events = eventData;
+  map = mapInstance;
+  timeline = timelineInstance;
+  markers = markersInstance;
 
-    // 播放/暂停按钮的点击事件
-    playPauseBtn.addEventListener('click', () => {
-        isPlaying = !isPlaying;
-        if (isPlaying) {
-            playPauseBtn.innerHTML = '⏸️'; // 显示暂停
-            playEvent();
-        } else {
-            playPauseBtn.innerHTML = '▶️'; // 显示播放
-            pauseEvent();
-        }
-    });
+  // 获取控制器按钮
+  const playPauseBtn = document.getElementById('playPauseBtn');
+  const stopBtn = document.getElementById('stopBtn');
+  const playModeBtn = document.getElementById('playModeBtn');
+  const speedBtns = document.querySelectorAll('.speed-controls button');
+  const progressBar = document.getElementById('progressBar');
 
-    // 停止按钮的点击事件
-    stopBtn.addEventListener('click', () => {
-        stopEvent();
-    });
+  // 播放/暂停按钮的点击事件
+  playPauseBtn.addEventListener('click', togglePlayPause);
+  // 停止按钮的点击事件
+  stopBtn.addEventListener('click', stopEvent);
+  // 播放模式按钮的点击事件
+  playModeBtn?.addEventListener('click', togglePlayMode);
+  // 速度控制按钮的点击事件
+  speedBtns.forEach(btn => btn.addEventListener('click', handleSpeedChange));
+  // 监听时间轴的选择事件
+  timeline.on('select', handleTimelineSelect);
+  // 进度条更新
+  progressBar.addEventListener('input', handleProgressBarInput);
+  // 监听地图标记的点击事件
+  markers.forEach(marker => marker.on('click', () => handleMarkerClick(marker)));
 
-    // 播放模式按钮的点击事件
-    playModeBtn.addEventListener('click', () => {
-        isLooping = !isLooping;
-        playModeBtn.innerHTML = isLooping ? '🔂 循环播放' : '🔁 单次播放';
-    });
-
-    // 速度控制按钮的点击事件
-    speedBtns.forEach((btn) => {
-        btn.addEventListener('click', () => {
-            currentSpeed = parseInt(btn.innerText, 10);
-            speedBtns.forEach(b => b.style.backgroundColor = '');
-            btn.style.backgroundColor = '#45a049';
-            setSpeed(currentSpeed);
-        });
-    });
-
-    // 进度条更新
-    progressBar.addEventListener('input', () => {
-        currentProgress = progressBar.value*1;
-        updateEventProgress(currentProgress);
-    });
-
-}
-// 播放事件
-function playEvent() {
-    interval = setInterval(() => {
-      // 增加当前进度
-      currentProgress += currentSpeed * 0.1;  // 根据播放速度调整进度
-      progressBar.value = currentProgress;
-  
-      // 更新时间轴和地图
-      updateTimelineAndMap(currentProgress);
-  
-      if (currentProgress >= 100) {
-        if(isLooping){
-          currentProgress = 0;
-          progressBar.value = currentProgress;
-        }else{
-          stopEvent();
-        }
-      }
-    }, 100); // 每 100ms 更新一次进度
+  // 播放/暂停按钮点击事件
+  function togglePlayPause() {
+    isPlaying = !isPlaying;
+    if (isPlaying) {
+      playPauseBtn.innerHTML = '⏸️'; // 显示暂停
+      playEvent();
+    } else {
+      playPauseBtn.innerHTML = '▶️'; // 显示播放
+      pauseEvent();
+    }
   }
 
-// 暂停事件
-function pauseEvent() {
-    clearInterval(interval);  // 清除定时器，暂停播放
-  }
-  
-  // 停止事件
+  // 停止按钮点击事件
   function stopEvent() {
-    clearInterval(interval);  // 清除定时器
+    clearInterval(interval);
     currentProgress = 0;
     progressBar.value = currentProgress;
-    currentIndex = 0; // 重置为第一个事件
-    // 清空地图和时间轴的焦点
+    currentIndex = 0;
     resetMapAndTimeline();
     isPlaying = false;
     playPauseBtn.innerHTML = '▶️'; // 显示播放
   }
 
-// 设置播放速度
-function setSpeed(speed) {
-    console.log(`设置播放速度为 ${speed}x`);
-    // 调整播放速度的逻辑
-    currentSpeed = speed;
+  // 播放模式按钮点击事件
+  function togglePlayMode() {
+    isLooping = !isLooping;
+    playModeBtn.innerHTML = isLooping ? '🔂' : '🔁';
+  }
 
-}
-// 更新时间轴和地图
-function updateTimelineAndMap(progress) {
-    // 根据进度计算当前应该展示的事件索引
+  // 速度控制按钮点击事件
+  function handleSpeedChange(event) {
+    currentSpeed = parseInt(event.target.innerText, 10);
+    speedBtns.forEach(b => b.style.backgroundColor = '');
+    event.target.style.backgroundColor = '#45a049';
+    setSpeed(currentSpeed);
+  }
+
+  // 时间轴选择事件
+  function handleTimelineSelect(properties) {
+    if (properties.items.length > 0) {
+      const selectedEvent = events.find(e => e.id === properties.items[0]);
+      if (selectedEvent) {
+        handleTimelineClick(selectedEvent);
+      }
+    }
+  }
+
+  // 进度条输入事件
+  function handleProgressBarInput() {
+    currentProgress = progressBar.value;
+    handleProgressBarClick(currentProgress);
+  }
+
+  // 地图标记点击事件
+  function handleMarkerClick(marker) {
+    const selectedEvent = events.find(event => event.coordinates[0] === marker.getLatLng().lng && event.coordinates[1] === marker.getLatLng().lat);
+    if (selectedEvent) {
+      handleTimelineClick(selectedEvent);
+    }
+  }
+
+  // 播放事件
+  function playEvent() {
+    interval = setInterval(() => {
+      currentProgress += currentSpeed * 0.1;
+      progressBar.value = currentProgress;
+      updateTimelineAndMap(currentProgress);
+
+      if (currentProgress >= 100) {
+        currentProgress = 0;
+        progressBar.value = currentProgress;
+        currentIndex = 0;
+        updateTimelineAndMap(currentProgress);
+
+        if (!isLooping) {
+          stopEvent();
+        }
+      }
+    }, 100);
+  }
+
+  // 暂停事件
+  function pauseEvent() {
+    clearInterval(interval);
+  }
+
+  // 设置播放速度
+  function setSpeed(speed) {
+    console.log(`设置播放速度为 ${speed}x`);
+    currentSpeed = speed;
+  }
+
+  // 更新时间轴和地图
+  function updateTimelineAndMap(progress) {
     const eventIndex = Math.floor((progress / 100) * events.length);
-  
-    if (eventIndex !== currentIndex) {
+    if (eventIndex !== currentIndex || eventIndex === 0) {
       currentIndex = eventIndex;
       const event = events[currentIndex];
-      if(event === undefined) return;
+      if (!event) return;
 
       // 更新地图聚焦
       map.setView([event.coordinates[1], event.coordinates[0]], 15); // 聚焦到当前事件
       const marker = markers[currentIndex]; // 获取当前事件的标记
       marker.openPopup(); // 弹出事件信息
-  
+
       // 更新时间轴
-      timeline.setWindow(event.start, event.end);  // 时间轴同步当前事件的时间
+      timeline.setWindow(event.start, event.end);
     }
   }
-// 更新事件进度
-function updateEventProgress(progress) {
-    console.log(`更新进度为 ${progress}%`);
-    // 更新事件的播放进度，联动时间轴或其他元素
-}
-// 重置地图和时间轴
-function resetMapAndTimeline() {
-    // 重新设置地图视野和时间轴
-    map.setView([30.5931, 114.3055], 13);  // 默认地图位置
-    timeline.setWindow(events[0].start, events[0].end);  // 默认设置时间轴到第一个事件
+
+  // 处理时间轴点击
+  function handleTimelineClick(selectedEvent) {
+    const eventStartTime = new Date(events[0].start).getTime();  // 获取第一个事件的起始时间
+    const eventEndTime = new Date(events[events.length - 1].end).getTime();  // 获取最后一个事件的结束时间
+    const selectedEventStart = new Date(selectedEvent.start).getTime();
+    const selectedEventIndex = events.findIndex(event => event.id === selectedEvent.id);
+
+    // 计算进度百分比
+    const progress = (selectedEventStart - eventStartTime) / (eventEndTime - eventStartTime) * 100;
+
+    progressBar.value = progress;
+    currentProgress = progress;
+
+    map.setView([selectedEvent.coordinates[1], selectedEvent.coordinates[0]], 15);
+    const marker = markers[selectedEventIndex];
+    marker.openPopup();
+
+    timeline.setWindow(selectedEvent.start, selectedEvent.end);
   }
-  
+
+  // 处理进度条点击
+  function handleProgressBarClick(progress) {
+    const selectedEventIndex = Math.floor((progress / 100) * events.length);
+    const selectedEvent = events[selectedEventIndex];
+
+    progressBar.value = progress;
+
+    map.setView([selectedEvent.coordinates[1], selectedEvent.coordinates[0]], 15);
+    const marker = markers[selectedEventIndex];
+    marker.openPopup();
+
+    timeline.setWindow(selectedEvent.start, selectedEvent.end);
+  }
+
+  // 重置地图和时间轴
+  function resetMapAndTimeline() {
+    map.setView([events[0].coordinates[1], events[0].coordinates[0]], 13);
+    timeline.setWindow(events[0].start, events[0].end);
+  }
+}
+
+
 export default {
-    // playPauseBtn,
-    // stopBtn,
-    // playModeBtn,
-    // speedBtns,
-    // progressBar,
-    init
+  init
 };
