@@ -19,7 +19,8 @@ const defaultConfig = {
     controlBtn: "control-btn", // 控制按钮样式
     playerControlsContainer: "player-controls", // 控制器容器样式
     progressBar: "progress-bar"  // 进度条样式
-  }
+  },
+  
 };
 
 const EventPlayer = {
@@ -63,7 +64,7 @@ const EventPlayer = {
 
     // 初始化地图
     const map = initializeMap();
-    const markers = addEventMarkers(map, events);
+    const markers = addEventMarkers(map, events, config.markIcon);
 
     // 初始化时间轴
     const timeline = initializeTimeline(events);

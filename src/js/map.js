@@ -17,15 +17,15 @@ const initializeMap = () => {
   return map;
 };
 
-export const addEventMarkers = (map, events) => {
-  const customIcon = new L.Icon({
-    iconUrl: icon,
-    iconSize: [41, 41],
-    iconAnchor: [16, 32],
-    popupAnchor: [0, -32],
-  });
+export const addEventMarkers = (map, events, icon) => {
+
   events.forEach(event => {
-    const marker = L.marker([event.coordinates[1], event.coordinates[0]], {icon:customIcon}).addTo(map);
+    const marker = L.marker([event.coordinates[1], event.coordinates[0]], icon?{icon:new L.Icon({
+      iconUrl: icon,
+      iconSize: [41, 41],
+      iconAnchor: [16, 32],
+      popupAnchor: [0, -32],
+    })}:{}).addTo(map);
     marker.bindPopup(`<b>${event.title}</b><br>${event.description}`);
 
     marker.on('click', () => {
