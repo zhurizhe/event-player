@@ -1,7 +1,4 @@
 // src/js/main.js
-import "leaflet/dist/leaflet.css";
-import "vis-timeline/styles/vis-timeline-graph2d.min.css";
-import "bootstrap/dist/css/bootstrap.min.css";
 import "bootstrap/dist/js/bootstrap.bundle.min.js";
 import initializeMap, { addEventMarkers } from "./map";
 import initializeTimeline from "./timeline";

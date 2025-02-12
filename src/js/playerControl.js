@@ -25,13 +25,13 @@ function init(eventData, mapInstance, timelineInstance, markersInstance) {
   const progressBar = document.getElementById('progressBar');
 
   // 播放/暂停按钮的点击事件
-  playPauseBtn.addEventListener('click', togglePlayPause);
+  playPauseBtn?.addEventListener('click', togglePlayPause);
   // 停止按钮的点击事件
-  stopBtn.addEventListener('click', stopEvent);
+  stopBtn?.addEventListener('click', stopEvent);
   // 播放模式按钮的点击事件
   playModeBtn?.addEventListener('click', togglePlayMode);
   // 速度控制按钮的点击事件
-  speedBtns.forEach(btn => btn.addEventListener('click', handleSpeedChange));
+  speedBtns?.forEach(btn => btn.addEventListener('click', handleSpeedChange));
   // 监听时间轴的选择事件
   timeline.on('select', handleTimelineSelect);
   // 进度条更新

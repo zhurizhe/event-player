@@ -1,7 +1,6 @@
 // src/js/timeline.js
 import { Timeline } from 'vis-timeline/standalone';
 import { DataSet } from 'vis-data';
-import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 
 const initializeTimeline = (events) => {
   const container = document.getElementById('timeline');
