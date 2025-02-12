@@ -25,7 +25,7 @@ const defaultConfig = {
   }
 };
 
-window.EventPlayer = {
+const EventPlayer = {
   init: function (config) {
     // 合并默认配置与用户传入的配置
     const finalConfig = { ...defaultConfig, ...config };
@@ -73,9 +73,10 @@ window.EventPlayer = {
     playerControl.init(events, map, timeline, markers);
   },
 };
-
+window.EventPlayer = EventPlayer;
 // 监听自定义事件（如果使用）
 document.addEventListener("initializeEventPlayer", (e) => {
   const { container, events } = e.detail;
   window.EventPlayer.init({ container, events });
 });
+export default EventPlayer;
