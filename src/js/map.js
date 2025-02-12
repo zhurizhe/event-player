@@ -1,19 +1,13 @@
 // src/js/map.js
 import L from 'leaflet';
-import 'leaflet/dist/leaflet.css';
-import { showModal } from './modal';
+import icon from '../images/icon.png';
 let markers = [];  // 存储所有的标记
     // 创建自定义图标
-const customIcon = new L.Icon({
-  iconUrl: '/assets/images/marker-icon.png',
-  iconSize: [41, 41],
-  iconAnchor: [16, 32],
-  popupAnchor: [0, -32],
-});
+
 const accessToken = 'pk.eyJ1Ijoic3Rld2FydDc5NzEiLCJhIjoiY202dzdmbzh0MDdsazJzb2hzdDU2bWsyciJ9.p536KOpuLcph6nhzEY4A_w'; 
 const initializeMap = () => {
   const map = L.map('map').setView([30.5931, 114.3055], 13); // 示例坐标：武汉
-
+ 
   L.tileLayer(`https://api.mapbox.com/styles/v1/mapbox/light-v10/tiles/{z}/{x}/{y}?access_token=${accessToken}`, {
     attribution: '© Mapbox © OpenStreetMap contributors',
     tileSize: 512,
@@ -24,6 +18,12 @@ const initializeMap = () => {
 };
 
 export const addEventMarkers = (map, events) => {
+  const customIcon = new L.Icon({
+    iconUrl: icon,
+    iconSize: [41, 41],
+    iconAnchor: [16, 32],
+    popupAnchor: [0, -32],
+  });
   events.forEach(event => {
     const marker = L.marker([event.coordinates[1], event.coordinates[0]], {icon:customIcon}).addTo(map);
     marker.bindPopup(`<b>${event.title}</b><br>${event.description}`);
