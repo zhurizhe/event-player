@@ -163,8 +163,11 @@ function init(eventData, mapInstance, timelineInstance, markersInstance) {
     currentProgress = progress;
 
     map.setView([selectedEvent.coordinates[1], selectedEvent.coordinates[0]], 15);
-    const marker = markers[selectedEventIndex];
-    marker.openPopup();
+    setTimeout(() => {
+      const marker = markers[selectedEventIndex];
+      marker.openPopup();
+    }, 500);
+  
 
     timeline.setWindow(selectedEvent.start, selectedEvent.end);
   }
