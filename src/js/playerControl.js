@@ -161,8 +161,8 @@ function init(eventData, mapInstance, timelineInstance, markersInstance) {
 
     progressBar.value = progress;
     currentProgress = progress;
+    map.setView([selectedEvent.coordinates[1], selectedEvent.coordinates[0]], 15);
     map.whenReady(function () {
-      map.setView([selectedEvent.coordinates[1], selectedEvent.coordinates[0]], 15);
       const marker = markers[selectedEventIndex];
       marker.openPopup();
     });
