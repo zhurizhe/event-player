@@ -1,13 +1,9 @@
 // webpack.config.js
 const path = require('path');
-
-module.exports = {
+const { merge } = require('webpack-merge');
+const baseConfig ={
   entry: './src/js/main.js',
-  output: {
-    filename: 'main.js',
-    path: path.resolve(__dirname, 'dist'),
-    publicPath: '/dist/', // 输出路径配置
-  },
+ 
   mode: 'development',
   devtool: 'inline-source-map', // 开发模式使用源映射，方便调试
   devServer: {
@@ -45,4 +41,25 @@ module.exports = {
       'leaflet$': 'leaflet/dist/leaflet.js', // Leaflet路径别名
     },
   },
+ 
 };
+module.exports = [
+  merge(baseConfig, {
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.umd.js',
+      library: 'EventPlayer',
+      libraryTarget: 'umd',
+    },
+  }),
+  merge(baseConfig, {
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.esm.js',
+      libraryTarget: 'module',
+    },
+    experiments: {
+      outputModule: true,  // 启用 ESM 输出
+    },
+  }),
+];

@@ -1,4 +1,6 @@
 {
-    "presets": ["@babel/preset-env"]
-  }
-  
+  "presets": [
+    "@babel/preset-env",  // ES6+ 转换
+    "@babel/preset-react" // React 转换
+  ]
+}

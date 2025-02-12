@@ -3,13 +3,15 @@ import { Timeline } from 'vis-timeline/standalone';
 import { DataSet } from 'vis-data';
 import 'vis-timeline/styles/vis-timeline-graph2d.min.css';
 
-const initializeTimeline = (events, onSelect) => {
+const initializeTimeline = (events) => {
   const container = document.getElementById('timeline');
   const items = new DataSet(events.map(event => ({
     id: event.id,
     content: event.title,
     start: event.start,
     end: event.end,
+    style: 'background-color:#000000aa; border-radius: 5px; color: #fff'  // 事件的样式，可以自定义
+
   })));
 
   const options = {
@@ -19,18 +21,22 @@ const initializeTimeline = (events, onSelect) => {
     showCurrentTime: true,
     editable: false,
     // 更多配置选项根据需求调整
+// 设置时间轴的刻度和显示间隔
+
+format: {
+  minorLabels: {
+    minute: 'HH:mm', // 每分钟的显示格式
+    hour: 'HH:00',   // 每小时的显示格式
+  },
+  majorLabels: {
+    day: 'YYYY-MM-DD',  // 每天的显示格式
+    month: 'YYYY-MM',   // 每月的显示格式
+  }
+}
   };
 
   const timeline = new Timeline(container, items, options);
 
-  timeline.on('select', (properties) => {
-    if (properties.items.length > 0) {
-      const selectedEvent = events.find(event => event.id === properties.items[0]);
-      if (selectedEvent && onSelect) {
-        onSelect(selectedEvent);
-      }
-    }
-  });
 
   return timeline;
 };
