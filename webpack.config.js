@@ -2,30 +2,13 @@
 const path = require('path');
 const { merge } = require('webpack-merge');
 const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
-
-
-module.exports = {
+const baseConfig = {
   entry: './src/js/main.js',
 
   mode: 'development',
   devtool: 'inline-source-map', // 开发模式使用源映射，方便调试
-  devServer: {
-    static: {
-      directory: path.join(__dirname, '/'),
-    },
-    compress: true,
-    port: 9000,
-    hot: true,
-  },
-  output: {
-    path: path.resolve(__dirname, 'dist'),
-    filename: 'index.js',
-    // library: 'EventPlayer',
-    libraryTarget: 'module',
-    clean: true,  // 每次构建时清理 dist 文件夹
-    module: true,  // 开启模块化支持
-    globalObject: 'this' // 在不同环境下正确工作（浏览器或 Node.js）
-  },
+ 
+ 
   module: {
     rules: [
       {
@@ -67,10 +50,42 @@ module.exports = {
   optimization: {
     minimize: true,
   },
-  plugins: [new BundleAnalyzerPlugin()],
-  experiments:{
-    outputModule: true,  // 开启输出模块
-  }
+  // plugins: [new BundleAnalyzerPlugin()],
+  // experiments: {
+  //   outputModule: true,  // 开启输出模块
+  // }
 }
+
+module.exports = [
+  merge(baseConfig, {
+    devServer: {
+      static: {
+        directory: path.join(__dirname, '/'),
+      },
+      compress: true,
+      port: 9000,
+      // hot: true,
+    },
+    output: {
+      filename: 'main.js',
+      path: path.resolve(__dirname, 'dist'),
+      publicPath: '/dist/', // 输出路径配置
+    },
+  }),
+  merge(baseConfig, {
+    output: {
+      path: path.resolve(__dirname, 'dist'),
+      filename: 'index.js',
+      // library: 'EventPlayer',
+      libraryTarget: 'module',
+      // clean: true,  // 每次构建时清理 dist 文件夹
+      module: true,  // 开启模块化支持
+      globalObject: 'this' // 在不同环境下正确工作（浏览器或 Node.js）
+    },
+    experiments: {
+      outputModule: true,  // 开启输出模块
+    }
+  }),
+]
 
 
