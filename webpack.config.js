@@ -20,8 +20,8 @@ module.exports = {
   output: {
     path: path.resolve(__dirname, 'dist'),
     filename: 'index.js',
-    library: 'EventPlayer',
-    libraryTarget: 'umd',
+    // library: 'EventPlayer',
+    libraryTarget: 'module',
     clean: true,  // 每次构建时清理 dist 文件夹
     module: true,  // 开启模块化支持
     globalObject: 'this' // 在不同环境下正确工作（浏览器或 Node.js）
