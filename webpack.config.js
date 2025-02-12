@@ -1,9 +1,12 @@
 // webpack.config.js
 const path = require('path');
 const { merge } = require('webpack-merge');
-const baseConfig ={
+const BundleAnalyzerPlugin = require('webpack-bundle-analyzer').BundleAnalyzerPlugin;
+
+
+module.exports = {
   entry: './src/js/main.js',
- 
+
   mode: 'development',
   devtool: 'inline-source-map', // 开发模式使用源映射，方便调试
   devServer: {
@@ -14,6 +17,15 @@ const baseConfig ={
     port: 9000,
     hot: true,
   },
+  output: {
+    path: path.resolve(__dirname, 'dist'),
+    filename: 'index.js',
+    library: 'EventPlayer',
+    libraryTarget: 'umd',
+    clean: true,  // 每次构建时清理 dist 文件夹
+    module: true,  // 开启模块化支持
+    globalObject: 'this' // 在不同环境下正确工作（浏览器或 Node.js）
+  },
   module: {
     rules: [
       {
@@ -22,7 +34,7 @@ const baseConfig ={
         use: {
           loader: 'babel-loader',
           options: {
-            presets: ['@babel/preset-env'],
+            presets: ['@babel/preset-env', '@babel/preset-react'],
           },
         },
       },
@@ -34,41 +46,31 @@ const baseConfig ={
         test: /\.(png|svg|jpg|jpeg|gif)$/i,
         type: 'asset/resource',
         use: [
-        {
-          loader: 'file-loader',
-          options: {
-            name: '[name].[ext]',
-            outputPath: 'assets/',
+          {
+            loader: 'file-loader',
+            options: {
+              name: '[name].[ext]',
+              outputPath: 'assets/',
+            },
           },
-        },
-      ],
+        ],
       },
     ],
   },
   resolve: {
+    extensions: ['.js', '.json'],  // 自动解析这些扩展名
+    modules: [path.resolve(__dirname, 'src'), 'node_modules'],  // 定义模块解析路径
     alias: {
       'leaflet$': 'leaflet/dist/leaflet.js', // Leaflet路径别名
     },
   },
- 
-};
-module.exports = [
-  merge(baseConfig, {
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'index.umd.js',
-      library: 'EventPlayer',
-      libraryTarget: 'umd',
-    },
-  }),
-  merge(baseConfig, {
-    output: {
-      path: path.resolve(__dirname, 'dist'),
-      filename: 'index.esm.js',
-      libraryTarget: 'module',
-    },
-    experiments: {
-      outputModule: true,  // 启用 ESM 输出
-    },
-  }),
-];
+  optimization: {
+    minimize: true,
+  },
+  plugins: [new BundleAnalyzerPlugin()],
+  experiments:{
+    outputModule: true,  // 开启输出模块
+  }
+}
+
+
