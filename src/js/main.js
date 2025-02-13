@@ -42,10 +42,7 @@ const EventPlayer = {
       console.error(`EventPlayer 初始化失败：未找到容器 "${container}"。`);
       return;
     }
-    if(localStorage.getItem('eventplayerinit') === 'true') {
-      return
-    }
-    localStorage.setItem('eventplayerinit', 'true');
+  
     // 根据配置动态插入控制器HTML
     containerElement.innerHTML = `
       <div id="map"></div>
